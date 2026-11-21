@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DviTTS Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500&family=Noto+Sans+Bengali&family=Noto+Sans+Gujarati&family=Noto+Sans+Gurmukhi&family=Noto+Sans+Oriya&display=swap">
+<style>
+:root{--bg:#fbfaf7;--card:#ffffff;--ink:#1d1b18;--mute:#6b665d;--line:#e8e4dc;--acc:#c2410c;--acc-soft:#fff1e8;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,"Noto Sans Devanagari","Noto Sans Bengali","Noto Sans Gujarati","Noto Sans Gurmukhi","Noto Sans Oriya",system-ui,sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding-block:48px 64px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1{font-size:clamp(2.2rem,5vw,3rem);line-height:1.1;margin:0 0 6px;letter-spacing:-.02em}
+.tag{font-size:1.15rem;color:var(--mute);margin:0 0 22px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 34px}
+.btns a{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);text-decoration:none;font-weight:500;font-size:.95rem}
+.btns a:hover{border-color:var(--acc);color:var(--acc)}
+h2{font-size:1.5rem;margin:52px 0 6px;letter-spacing:-.01em}
+.lead{color:var(--mute);margin:0 0 18px}
+.models{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:18px}
+.model{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+.model h3{margin:0;font-size:1.3rem}
+.model .sz{display:inline-block;margin:4px 0 12px;padding:2px 9px;border-radius:999px;background:var(--acc-soft);color:var(--acc);font-size:.82rem;font-weight:600}
+.model ul{margin:0;padding-left:18px} .model li{margin:5px 0}
+.model .links{margin-top:14px;font-size:.92rem} .model .links a{color:var(--acc);margin-right:14px}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px 26px;padding:0;list-style:none;margin:18px 0 0}
+.feat li b{display:block} .feat li{color:var(--mute)} .feat li b{color:var(--ink)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.95rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)} tr:last-child td{border-bottom:0}
+thead th{font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--mute);font-weight:600}
+td.n{font-variant-numeric:tabular-nums}
+.sample{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:0 0 16px}
+.sample h3{margin:0 0 8px;font-size:1.1rem}
+.text{margin:0 0 14px;font-size:1.05rem} .text span{display:inline-block;margin-right:8px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--acc)}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px 18px}
+.lab{margin:0 0 4px;font-size:.82rem;color:var(--mute);font-weight:500} .lab small{font-weight:400}
+audio{width:100%;max-width:100%;height:38px}
+.vrow{padding:12px 0;border-top:1px solid var(--line)} .vrow:first-of-type{border-top:0}
+.vname{margin:0 0 6px;font-weight:600} .vname small{color:var(--mute);font-weight:400;margin-left:6px}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--mute);font-size:.9rem}
+footer a{color:var(--acc)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>DviTTS</h1>
+<p class="tag">Zero-shot text-to-speech for English and six Indian languages: Hindi, Marathi, Bengali, Punjabi, Gujarati and Odia.</p>
+<nav class="btns" aria-label="Links">
+<a href="https://github.com/codeprakhar25/dvitts">GitHub code</a>
+<a href="https://huggingface.co/prakharkhatri/dvitts">🤗 DviTTS weights</a>
+<a href="https://huggingface.co/prakharkhatri/dvitts-nano">🤗 DviTTS-Nano weights</a>
+<a href="https://huggingface.co/spaces/prakharkhatri/DviTTS-demo">🤗 Live demo</a>
+<a href="https://github.com/codeprakhar25/dvitts-nano/releases/latest">Android app</a>
+</nav>
+
+<div class="models">
+<section class="model">
+<h3>DviTTS</h3><span class="sz">0.5B · GPU</span>
+<ul>
+<li><b>Zero-shot cloning:</b> reads new text in any voice from 3–10 s of speech and its transcript.</li>
+<li><b>Fast:</b> 0.37x real time on an A10G; first audio in 1.5 s (English) and 2.7 s (Hindi).</li>
+<li><b>Light on memory:</b> 2.2 GB of GPU memory while speaking.</li>
+<li><b>Easy to run:</b> <code>pip install</code>, a command-line tool, and sentence-by-sentence streaming.</li>
+</ul>
+<p class="links"><a href="https://huggingface.co/prakharkhatri/dvitts">Model card</a><a href="https://github.com/codeprakhar25/dvitts">Code</a></p>
+</section>
+<section class="model">
+<h3>DviTTS-Nano</h3><span class="sz">110M · phone and laptop CPU</span>
+<ul>
+<li><b>On-device:</b> 351 MB of ONNX files; no GPU, no PyTorch.</li>
+<li><b>Real time on a phone:</b> 0.61x real time and 877 MB peak memory on a Snapdragon 8 Gen 3.</li>
+<li><b>18 preset voices</b> across all seven languages.</li>
+<li><b>Ready for apps:</b> an Android library and demo app, plus a Python runner for any CPU.</li>
+</ul>
+<p class="links"><a href="https://huggingface.co/prakharkhatri/dvitts-nano">Model card</a><a href="https://github.com/codeprakhar25/dvitts-nano">Code and app</a></p>
+</section>
+</div>
+
+<ul class="feat">
+<li><b>Built for Indian languages</b>Native scripts in, natural speech out; numbers, dates and money are read the way people say them.</li>
+<li><b>One stack, two sizes</b>A 0.5B language model with a flow decoder, and a distilled 110M version with a one-step decoder.</li>
+<li><b>Watermarked</b>Every clip carries an inaudible AudioSeal mark, so AI-generated speech can be detected.</li>
+<li><b>Open</b>Apache 2.0 weights and code.</li>
+</ul>
+
+<h2>Accuracy</h2>
+<p class="lead">Unseen speakers only. Word error (English, Whisper large-v3) and character error (Indian languages, IndicConformer), in %; lower is better.</p>
+<div class="tw"><table>
+<thead><tr><th scope="col">Test set</th><th scope="col">Metric</th><th scope="col">DviTTS</th><th scope="col">DviTTS-Nano</th></tr></thead>
+<tbody>
+<tr><td>Seed-TTS test-en</td><td>WER</td><td class="n">2.04</td><td class="n">2.65</td></tr>
+<tr><td>CMU Arctic</td><td>WER</td><td class="n">1.45</td><td class="n">2.74</td></tr>
+<tr><td>LibriTTS-R test</td><td>WER</td><td class="n">3.07</td><td class="n">3.63</td></tr>
+<tr><td>LibriSpeech-PC test-clean</td><td>WER</td><td class="n">2.05</td><td class="n">—</td></tr>
+<tr><td>IndicVoices Hindi</td><td>CER</td><td class="n">3.53</td><td class="n">3.52</td></tr>
+<tr><td>FLEURS Hindi</td><td>CER</td><td class="n">4.52</td><td class="n">5.16</td></tr>
+<tr><td>FLEURS Marathi</td><td>CER</td><td class="n">2.57</td><td class="n">3.70</td></tr>
+<tr><td>FLEURS Bengali</td><td>CER</td><td class="n">2.69</td><td class="n">3.54</td></tr>
+<tr><td>FLEURS Punjabi</td><td>CER</td><td class="n">5.23</td><td class="n">5.54</td></tr>
+<tr><td>FLEURS Gujarati</td><td>CER</td><td class="n">3.76</td><td class="n">4.54</td></tr>
+<tr><td>FLEURS Odia</td><td>CER</td><td class="n">3.11</td><td class="n">3.75</td></tr>
+</tbody></table></div>
+
+<h2 id="clone">Voice cloning</h2>
+<p class="lead">DviTTS reads new text in the voice of a short prompt. The prompts are speakers the model never saw in training; each output is one take, not picked from several.</p>
+<div class="sample"><h3>English</h3>
+<p class="text" lang="en"><span>Text</span> “It might rain this evening, so please take an umbrella when you leave the house.”</p>
+<div class="pair"><div><p class="lab">Prompt <small>(LibriTTS-R test-clean, unseen speaker)</small></p><audio controls preload="none" src="clips/mp3/clone/ref_en.mp3" aria-label="English prompt"></audio></div>
+<div><p class="lab">DviTTS output</p><audio controls preload="none" src="clips/mp3/clone/clone_en.mp3" aria-label="English output"></audio></div></div></div>
+<div class="sample"><h3>Hindi</h3>
+<p class="text" lang="hi"><span>Text</span> “आज शाम बारिश हो सकती है, इसलिए घर से निकलते समय छाता साथ ले जाइए।”</p>
+<div class="pair"><div><p class="lab">Prompt <small>(FLEURS, unseen speaker)</small></p><audio controls preload="none" src="clips/mp3/clone/ref_hi.mp3" aria-label="Hindi prompt"></audio></div>
+<div><p class="lab">DviTTS output</p><audio controls preload="none" src="clips/mp3/clone/clone_hi.mp3" aria-label="Hindi output"></audio></div></div></div>
+<div class="sample"><h3>Marathi</h3>
+<p class="text" lang="mr"><span>Text</span> “आज संध्याकाळी पाऊस पडण्याची शक्यता आहे, त्यामुळे घरातून निघताना छत्री सोबत घ्या.”</p>
+<div class="pair"><div><p class="lab">Prompt <small>(FLEURS, unseen speaker)</small></p><audio controls preload="none" src="clips/mp3/clone/ref_mr.mp3" aria-label="Marathi prompt"></audio></div>
+<div><p class="lab">DviTTS output</p><audio controls preload="none" src="clips/mp3/clone/clone_mr.mp3" aria-label="Marathi output"></audio></div></div></div>
+<div class="sample"><h3>Bengali</h3>
+<p class="text" lang="bn"><span>Text</span> “আজ সন্ধ্যায় বৃষ্টি হতে পারে, তাই বাড়ি থেকে বেরোনোর সময় ছাতা সঙ্গে নিন।”</p>
+<div class="pair"><div><p class="lab">Prompt <small>(FLEURS, unseen speaker)</small></p><audio controls preload="none" src="clips/mp3/clone/ref_bn.mp3" aria-label="Bengali prompt"></audio></div>
+<div><p class="lab">DviTTS output</p><audio controls preload="none" src="clips/mp3/clone/clone_bn.mp3" aria-label="Bengali output"></audio></div></div></div>
+<div class="sample"><h3>Punjabi</h3>
+<p class="text" lang="pa"><span>Text</span> “ਅੱਜ ਸ਼ਾਮ ਨੂੰ ਮੀਂਹ ਪੈ ਸਕਦਾ ਹੈ, ਇਸ ਲਈ ਘਰੋਂ ਨਿਕਲਦੇ ਸਮੇਂ ਛਤਰੀ ਨਾਲ ਲੈ ਜਾਓ।”</p>
+<div class="pair"><div><p class="lab">Prompt <small>(FLEURS, unseen speaker)</small></p><audio controls preload="none" src="clips/mp3/clone/ref_pa.mp3" aria-label="Punjabi prompt"></audio></div>
+<div><p class="lab">DviTTS output</p><audio controls preload="none" src="clips/mp3/clone/clone_pa.mp3" aria-label="Punjabi output"></audio></div></div></div>
+<div class="sample"><h3>Gujarati</h3>
+<p class="text" lang="gu"><span>Text</span> “આજે સાંજે વરસાદ પડી શકે છે, તેથી ઘરેથી નીકળતી વખતે છત્રી સાથે લઈ જજો.”</p>
+<div class="pair"><div><p class="lab">Prompt <small>(FLEURS, unseen speaker)</small></p><audio controls preload="none" src="clips/mp3/clone/ref_gu.mp3" aria-label="Gujarati prompt"></audio></div>
+<div><p class="lab">DviTTS output</p><audio controls preload="none" src="clips/mp3/clone/clone_gu.mp3" aria-label="Gujarati output"></audio></div></div></div>
+<div class="sample"><h3>Odia</h3>
+<p class="text" lang="or"><span>Text</span> “ଆଜି ସନ୍ଧ୍ୟାରେ ବର୍ଷା ହୋଇପାରେ, ତେଣୁ ଘରୁ ବାହାରିବା ବେଳେ ଛତା ସାଙ୍ଗରେ ନିଅନ୍ତୁ।”</p>
+<div class="pair"><div><p class="lab">Prompt <small>(FLEURS, unseen speaker)</small></p><audio controls preload="none" src="clips/mp3/clone/ref_or.mp3" aria-label="Odia prompt"></audio></div>
+<div><p class="lab">DviTTS output</p><audio controls preload="none" src="clips/mp3/clone/clone_or.mp3" aria-label="Odia output"></audio></div></div></div>
+<div class="sample"><h3>Hindi prompt, English text</h3>
+<p class="text" lang="en"><span>Text</span> “The meeting starts at 10:30 on Monday, so please be on time.”</p>
+<div class="pair"><div><p class="lab">Prompt <small>(FLEURS, unseen speaker)</small></p><audio controls preload="none" src="clips/mp3/clone/ref_hi.mp3" aria-label="Hindi prompt, English text prompt"></audio></div>
+<div><p class="lab">DviTTS output</p><audio controls preload="none" src="clips/mp3/clone/xling_hi_to_en.mp3" aria-label="Hindi prompt, English text output"></audio></div></div></div>
+
+<h2 id="listen">Preset voices</h2>
+<p class="lead">The same sentence in each language, from both models. Voice names are labels, not the speakers’ names.</p>
+<div class="sample"><h3>English</h3>
+<p class="text" lang="en"><span>Text</span> “Please call me back after the meeting ends.”</p>
+<div class="vrow"><p class="vname">Emma <small>female</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/emma.mp3" aria-label="emma DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/emma.mp3" aria-label="emma DviTTS-Nano"></audio></div></div></div>
+<div class="vrow"><p class="vname">Grace <small>female</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/grace.mp3" aria-label="grace DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/grace.mp3" aria-label="grace DviTTS-Nano"></audio></div></div></div>
+<div class="vrow"><p class="vname">James <small>male</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/james.mp3" aria-label="james DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/james.mp3" aria-label="james DviTTS-Nano"></audio></div></div></div>
+<div class="vrow"><p class="vname">Oliver <small>male</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/oliver.mp3" aria-label="oliver DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/oliver.mp3" aria-label="oliver DviTTS-Nano"></audio></div></div></div></div>
+<div class="sample"><h3>Hindi</h3>
+<p class="text" lang="hi"><span>Text</span> “कल सुबह हम स्टेशन पर मिलेंगे।”</p>
+<div class="vrow"><p class="vname">Ananya <small>female</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/ananya.mp3" aria-label="ananya DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/ananya.mp3" aria-label="ananya DviTTS-Nano"></audio></div></div></div>
+<div class="vrow"><p class="vname">Kavya <small>female</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/kavya.mp3" aria-label="kavya DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/kavya.mp3" aria-label="kavya DviTTS-Nano"></audio></div></div></div>
+<div class="vrow"><p class="vname">Arjun <small>male</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/arjun.mp3" aria-label="arjun DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/arjun.mp3" aria-label="arjun DviTTS-Nano"></audio></div></div></div>
+<div class="vrow"><p class="vname">Rohan <small>male</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/rohan.mp3" aria-label="rohan DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/rohan.mp3" aria-label="rohan DviTTS-Nano"></audio></div></div></div></div>
+<div class="sample"><h3>Marathi</h3>
+<p class="text" lang="mr"><span>Text</span> “आज संध्याकाळी पाऊस पडण्याची शक्यता आहे.”</p>
+<div class="vrow"><p class="vname">Sneha <small>female</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/sneha.mp3" aria-label="sneha DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/sneha.mp3" aria-label="sneha DviTTS-Nano"></audio></div></div></div>
+<div class="vrow"><p class="vname">Aditya <small>male</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/aditya.mp3" aria-label="aditya DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/aditya.mp3" aria-label="aditya DviTTS-Nano"></audio></div></div></div></div>
+<div class="sample"><h3>Bengali</h3>
+<p class="text" lang="bn"><span>Text</span> “আজ আকাশ খুব পরিষ্কার।”</p>
+<div class="vrow"><p class="vname">Ishita <small>female</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/ishita.mp3" aria-label="ishita DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/ishita.mp3" aria-label="ishita DviTTS-Nano"></audio></div></div></div>
+<div class="vrow"><p class="vname">Arnab <small>male</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/arnab.mp3" aria-label="arnab DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/arnab.mp3" aria-label="arnab DviTTS-Nano"></audio></div></div></div></div>
+<div class="sample"><h3>Punjabi</h3>
+<p class="text" lang="pa"><span>Text</span> “ਅਸੀਂ ਕੱਲ੍ਹ ਸਕੂਲ ਜਾਵਾਂਗੇ।”</p>
+<div class="vrow"><p class="vname">Jasleen <small>female</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/jasleen.mp3" aria-label="jasleen DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/jasleen.mp3" aria-label="jasleen DviTTS-Nano"></audio></div></div></div>
+<div class="vrow"><p class="vname">Gurpreet <small>male</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/gurpreet.mp3" aria-label="gurpreet DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/gurpreet.mp3" aria-label="gurpreet DviTTS-Nano"></audio></div></div></div></div>
+<div class="sample"><h3>Gujarati</h3>
+<p class="text" lang="gu"><span>Text</span> “અમે આવતીકાલે બજારમાં જઈશું.”</p>
+<div class="vrow"><p class="vname">Hetal <small>female</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/hetal.mp3" aria-label="hetal DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/hetal.mp3" aria-label="hetal DviTTS-Nano"></audio></div></div></div>
+<div class="vrow"><p class="vname">Kunal <small>male</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/kunal.mp3" aria-label="kunal DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/kunal.mp3" aria-label="kunal DviTTS-Nano"></audio></div></div></div></div>
+<div class="sample"><h3>Odia</h3>
+<p class="text" lang="or"><span>Text</span> “ଆଜି ପାଗ ବହୁତ ଭଲ ଅଛି।”</p>
+<div class="vrow"><p class="vname">Subhashree <small>female</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/subhashree.mp3" aria-label="subhashree DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/subhashree.mp3" aria-label="subhashree DviTTS-Nano"></audio></div></div></div>
+<div class="vrow"><p class="vname">Debasis <small>male</small></p>
+<div class="pair"><div><p class="lab">DviTTS</p><audio controls preload="none" src="clips/mp3/gpu/debasis.mp3" aria-label="debasis DviTTS"></audio></div>
+<div><p class="lab">DviTTS-Nano</p><audio controls preload="none" src="clips/mp3/nano/debasis.mp3" aria-label="debasis DviTTS-Nano"></audio></div></div></div></div>
+
+<footer>
+<p>Every generated clip on this page carries an AudioSeal watermark. Prompts are from LibriTTS-R and FLEURS (CC BY 4.0). Clone only voices you have permission to use. Benchmarks, settings and limitations are in the model cards. Apache 2.0. Built on <a href="https://huggingface.co/prakharkhatri/IndiCodec">IndiCodec v1</a>.</p>
+</footer>
+</div>
+</body>
+</html>
